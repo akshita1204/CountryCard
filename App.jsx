@@ -3,14 +3,15 @@ import Header from './components/Header'
 import SearchBar from './components/SearchBar'
 import SelectMenu from './components/SelectMenu'
 import CountriesList from './components/CountriesList'
-
+import Contact from './components/Contact'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 
 const App = () => {
-  const [query, setQuery] = useState('')
+   const [query,setQuery]=useState("")
   return (
     <>
-      <Header />
+       <Header />
       <main>
         <div className="search-filter-container">
           <SearchBar setQuery={setQuery} />
@@ -18,8 +19,8 @@ const App = () => {
         </div>
         {query === 'unmount' ? '' : <CountriesList query={query} />}
       </main>
-    </>
+  </>
   )
 }
 
-export default App
+export default App;

@@ -1,15 +1,23 @@
-import {createRoot} from 'react-dom/client'
-import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider } from "react-router-dom"
-import App from './App'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import App from "./App.jsx";
+import Contact from "./components/Contact.jsx";
 
-const router=createBrowserRouter(
-    [
-        {
-            path:'/',
-            element:<App/>
-        }
-    ]
-)
-const root = createRoot(document.querySelector('#root'))
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
+  },
+]);
 
-root.render(<RouterProvider router={router}/>)
+const root = createRoot(document.getElementById("root"));
+root.render(
+  <StrictMode>
+    <RouterProvider router={router} />  
+  </StrictMode>
+);
