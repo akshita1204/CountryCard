@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import Contact from "./components/Contact.jsx";
 import Home from "./components/Home.jsx";
 import Error from "./components/Error.jsx"
+import CountryDetail from "./components/CountryDetail.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
             path: "/contact",
             element: <Contact />,
         },
+        {
+          path: "/country",
+          element: <CountryDetail />,
+      },
     ]
   },
   
