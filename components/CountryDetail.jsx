@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react'
 
 import './CountryDetail.css'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 export default function CountryDetail() {
-  const params=useParams();
-  console.log(params)
-  const countryName=params.country
-  //const countryName = new URLSearchParams(location.search).get('name')
+  const params = useParams()
+  const countryName = params.country
 
   const [countryData, setCountryData] = useState(null)
-  const [notfound,setnotfound]=useState(false)
+  const [notFound, setNotFound] = useState(false)
+
+  console.log(countryData?.borders);
 
   useEffect(() => {
     fetch(`https://restcountries.com/v3.1/name/${countryName}?fullText=true`)
       .then((res) => res.json())
       .then(([data]) => {
-        console.log(data)
         setCountryData({
           name: data.name.common,
           nativeName: Object.values(data.name.nativeName)[0].common,
@@ -30,22 +29,37 @@ export default function CountryDetail() {
           currencies: Object.values(data.currencies)
             .map((currency) => currency.name)
             .join(', '),
-          
+          borders: []
         })
-      }).catch(err=>{
-        setnotfound(true)
+
+        if(!data.borders) {
+          data.borders = []
+        }
+
+        Promise.all(data.borders.map((border) => {
+          return fetch(`https://restcountries.com/v3.1/alpha/${border}`)
+          .then((res) => res.json())
+          .then(([borderCountry]) => borderCountry.name.common)
+        })).then((borders) => {
+          setCountryData((prevState) => ({...prevState, borders }))
+        })
       })
-  }, [])
-  if(notfound)
-  {
-    return <div>Country not found</div>
+      .catch((err) => {
+        console.log(err);
+        setNotFound(true)
+      })
+  }, [countryName])
+
+  if(notFound) {
+    return <div>Country Not Found</div>
   }
+
   return countryData === null ? (
     'loading...'
   ) : (
     <main>
       <div className="country-details-container">
-        <span className="back-button" onClick={()=>history.back()}>
+        <span className="back-button" onClick={() => history.back()}>
           <i className="fa-solid fa-arrow-left"></i>&nbsp; Back
         </span>
         <div className="country-details">
@@ -88,9 +102,12 @@ export default function CountryDetail() {
                 <span className="languages"></span>
               </p>
             </div>
-            <div className="border-countries">
+           { countryData.borders.length !== 0 && <div className="border-countries">
               <b>Border Countries: </b>&nbsp;
-            </div>
+              {
+                countryData.borders.map((border) => <Link key={border} to={`/${border}`}>{border}</Link>)
+              }
+            </div>}
           </div>
         </div>
       </div>
