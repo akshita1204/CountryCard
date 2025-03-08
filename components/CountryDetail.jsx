@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-
 import './CountryDetail.css'
 import { Link, useParams } from 'react-router-dom'
 
@@ -55,7 +54,7 @@ export default function CountryDetail() {
   }
 
   return countryData === null ? (
-    'loading...'
+   'Loading...'
   ) : (
     <main>
       <div className="country-details-container">
